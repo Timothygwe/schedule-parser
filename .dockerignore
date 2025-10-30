@@ -1,0 +1,11 @@
+README.md
+CHANGELOG.md
+docker-compose.yml
+LICENSE
+.git
+.gitignore
+.github
+__pycache__
+*.pyc
+*.pyo
+*.pyd

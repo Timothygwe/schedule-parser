@@ -1,38 +1,24 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+
+
+def get_nearest_workday(date: datetime) -> datetime:
+    day_of_week = date.weekday()
+    if day_of_week >= 5:
+        days_to_monday = 7 - day_of_week
+        return date + timedelta(days=days_to_monday)
+    return date
 
 
 def get_first_week_date() -> datetime:
-    """
-    Возвращает дату начала первой недели семестра в зависимости от текущей даты.
-    
-    Логика определения семестра:
-    - Первый семестр (осенний): начинается 1 сентября текущего года
-    - Второй семестр (весенний): начинается 1 февраля текущего года
-    
-    Если текущая дата попадает в диапазон, выбирается соответствующий семестр:
-    - С 1 сентября до 1 февраля следующего года -> 1 сентября текущего года
-    - С 1 февраля до 1 сентября текущего года -> 1 февраля текущего года
-    - До 1 февраля текущего года -> 1 сентября прошлого года
-    
-    Returns:
-        datetime: Дата начала первой недели текущего семестра
-    """
     now = datetime.now()
-    
-    # Определяем начало учебного года (1 сентября)
     first_semester_start = datetime(now.year, 9, 1)
-    # Определяем начало второго семестра (1 февраля)
     second_semester_start = datetime(now.year, 2, 1)
-    
-    # Если сейчас до 1 сентября
     if now < first_semester_start:
-        # Если до 1 февраля текущего года - берем прошлогодний 1 сентября
         if now < second_semester_start:
-            return datetime(now.year - 1, 9, 1)
-        # Если между 1 февраля и 1 сентября - берем 1 февраля
+            semester_date = datetime(now.year - 1, 9, 1)
         else:
-            return second_semester_start
-    # Если после 1 сентября - берем текущий 1 сентября
+            semester_date = second_semester_start
     else:
-        return first_semester_start
+        semester_date = first_semester_start
+    return get_nearest_workday(semester_date)
 
